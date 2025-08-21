@@ -1,0 +1,47 @@
+.container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 80px;
+    padding: 15px 0;
+    background-color: var(--black-blue);
+}
+
+.container img {
+    height: 50px;
+    width: 50px;
+    border-radius: 25px;
+}
+
+.links {
+    margin-top: 40px;
+}
+
+.links a {
+    text-decoration: none;
+}
+
+.links a svg {
+    width: 32px;
+    height: 32px;
+    color: var(--white);
+    transition: color 100ms;
+    cursor: pointer;   
+}
+
+.links a:hover svg {
+    color: var(--info)
+}
+
+.logout {
+  width: 31px;
+  height: 31px;
+  margin-top: auto;
+  color: var(--error);
+  transition: color 100ms;
+  cursor: pointer;    
+}
+
+.logout:hover {
+    color: var(--error-hover)
+}

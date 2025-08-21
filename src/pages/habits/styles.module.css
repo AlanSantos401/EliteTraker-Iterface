@@ -1,6 +1,11 @@
+.app {
+ display: flex;
+}
+
 .container {
     background-color: var(--dark-blue);
     height: 100vh;
+    width: 100%;
 }
 
 .content {
@@ -56,4 +61,74 @@
 
 .input svg:hover {
     color: var(--info)
+}
+
+.habits {
+    margin-top: 40px;
+}
+
+.habit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 46px;
+    border-bottom: 1px solid var(--light);
+}
+
+.habit p {
+    color: var(--white);
+    font-size: 16px;
+}
+
+.habit div {
+    width: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.habit div input {
+  height: 23px;
+  width: 23px;
+  border-radius: 50%;         
+  cursor: pointer;
+  border: 2px solid var(--light);     
+  background-color: var(--light);
+  
+  appearance: none;          
+  -webkit-appearance: none; 
+  -moz-appearance: none; 
+  outline: none;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+}
+
+.habit div input:checked {
+  background-color: var(--info);
+  border-color: var(--info);
+}
+
+.habit div input:checked::after {
+  content: "✔";
+  color: var(--white);
+  font-size: 14px;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+
+.habit div svg {
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    color: var(--white);
+    transition: color 100ms;
+}
+
+.habit div svg:hover {
+    color: var(--error);
 }
