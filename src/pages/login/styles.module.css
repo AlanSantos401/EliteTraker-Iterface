@@ -1,0 +1,33 @@
+.container {
+    background-color:  #04141C;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content {
+    background-color: #001E2B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 32px;
+    width: 380px;
+    border-radius: 8px;
+}
+
+.content h1 {
+    color: #FFFFFF;
+    font-size: 24px;
+}
+
+.content p {
+    color: #FFFFFF;
+    font-weight: 300;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 20px;
+    width: 220px;
+}
+

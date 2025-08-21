@@ -1,0 +1,23 @@
+.container {
+    background-color: #016BFB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    font-size: 16px;
+    height: 36px;
+    width: 100%;
+    border-radius: 4px;
+    margin-top: 40px;
+    transition: background 100ms;
+}
+
+.container:hover {
+    background-color: #00357B;
+}
+
+.container svg {
+    height: 20px;
+    width: 20px;
+    margin-right: 4px;
+}
