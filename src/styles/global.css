@@ -1,3 +1,19 @@
+:root {
+    --black-blue: #04141C;
+    --dark-blue: #001E2B;
+    --darker-light-blue: #003045;
+    --neutral: #575757;
+    --light: #828282;
+    --white: #FFFFFF;
+    --error-hover: #9D1919;
+    --error: #DB3030;
+    --warning:  #FFC010;
+    --info-hover: #00357B;
+    --info: #016BF8;
+    --primary-dark: #00684A;
+    --primary: #00ED64;
+}
+
 * {
     margin: 0;
     padding: 0;

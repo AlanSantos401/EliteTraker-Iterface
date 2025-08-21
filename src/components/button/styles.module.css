@@ -1,5 +1,5 @@
 .container {
-    background-color: #016BFB;
+    background-color: var(--info);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -13,7 +13,7 @@
 }
 
 .container:hover {
-    background-color: #00357B;
+    background-color: var(--info-hover);
 }
 
 .container svg {

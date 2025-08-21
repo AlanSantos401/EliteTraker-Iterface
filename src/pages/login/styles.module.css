@@ -1,5 +1,5 @@
 .container {
-    background-color:  #04141C;
+    background-color: var(--black-blue);
     height: 100vh;
     display: flex;
     align-items: center;
@@ -7,7 +7,7 @@
 }
 
 .content {
-    background-color: #001E2B;
+    background-color: var(--dark-blue);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -18,12 +18,12 @@
 }
 
 .content h1 {
-    color: #FFFFFF;
+    color: var(--white);
     font-size: 24px;
 }
 
 .content p {
-    color: #FFFFFF;
+    color: var(--white);
     font-weight: 300;
     font-size: 12px;
     text-align: center;
