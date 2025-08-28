@@ -1,17 +1,21 @@
 import { Github } from "lucide-react";
 import styles from "./styles.module.css";
 import { Button } from "../../components/button";
-import { useNavigate } from "react-router-dom";
+import { api } from "../../service/api";
 
 export function Login() {
-	const navigate = useNavigate();
+
+	async function handleAuth() {
+		const { data } = await api.get('/auth');
+
+		window.location.href = data.redirectURL;
+	}
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.content}>
 				<h1>Entre com</h1>
-				<Button onClick={() => {
-					navigate('/');
-				}}>
+				<Button onClick={handleAuth}>
 					<Github />
 					GitHub
 				</Button>
