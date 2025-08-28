@@ -1,23 +1,26 @@
-import styles from './styles.module.css'
-import { useSearchParams } from 'react-router-dom'
-import { useEffect } from 'react';
-import { useUser } from '../../hooks/use-use';
-
+import styles from "./styles.module.css";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useUser } from "../../hooks/use-user";
 
 export function Auth() {
-     const [searchParams] = useSearchParams();
-     const {userData, getUserInfo} = useUser();
+	const navigate = useNavigate();
+	const [searchParams] = useSearchParams();
+	const { getUserInfo } = useUser();
 
-    useEffect(() => {
-        getUserInfo(String(searchParams.get('code')))
+	async function handleAuth() {
+		await getUserInfo(String(searchParams.get("code")));
 
-    }, [])
+		navigate("/");
+	}
 
-    return (
-        <div className={styles.container}>
-            <h1>Loading...</h1>
-            <p>{JSON.stringify(userData)}</p>
-        </div>
-    )
+	useEffect(() => {
+		handleAuth();
+	}, []);
 
+	return (
+		<div className={styles.container}>
+			<h1>Loading...</h1>
+		</div>
+	);
 }
