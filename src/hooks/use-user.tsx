@@ -12,6 +12,7 @@ export type USerData = {
 type UserContextProps = {
     getUserInfo: (githubCode: string) => Promise<void>;
     userData: USerData;
+    logout: () => void;
 }
 
 type UserProviderProps = {
@@ -49,12 +50,18 @@ export function UserProvider({ children }: UserProviderProps) {
         }
     }
 
+    async function logout() {
+        setUserData({} as USerData);
+
+        localStorage.removeItem(userLocalStorageKey);
+    }
+
     useEffect(() => {
-        loadUserData()
+        loadUserData();
     }, [])
 
     return (
-        <UserContext.Provider value={{ userData, getUserInfo }}>
+        <UserContext.Provider value={{ userData, getUserInfo, logout }}>
             {children}
         </UserContext.Provider>
     )

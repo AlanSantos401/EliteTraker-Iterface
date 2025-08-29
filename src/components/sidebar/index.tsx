@@ -1,10 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import style from "./styles.module.css";
 import { ListCheck, LogOut } from "lucide-react";
 import { useUser } from "../../hooks/use-user";
 
 export function Sidebar() {
-	const { userData } = useUser();
+	const { userData, logout } = useUser();
+	const navigate = useNavigate()
+
+	function handleLogout() {
+		logout();
+
+		navigate("/entrar");
+	}
 
 	return (
 		<div className={style.container}>
@@ -14,7 +21,7 @@ export function Sidebar() {
 					<ListCheck />
 				</Link>
 			</div>
-			<LogOut className={style.logout} />
+			<LogOut onClick={handleLogout} className={style.logout} />
 		</div>
 	);
 }
