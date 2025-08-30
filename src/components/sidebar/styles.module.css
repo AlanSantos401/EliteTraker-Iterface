@@ -15,6 +15,11 @@
 
 .links {
     margin-top: 40px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 40px;
+
 }
 
 .links a {
@@ -24,7 +29,7 @@
 .links a svg {
     width: 32px;
     height: 32px;
-    color: var(--white);
+    color: var(--neutral);
     transition: color 100ms;
     cursor: pointer;   
 }
@@ -44,4 +49,8 @@
 
 .logout:hover {
     color: var(--error-hover)
+}
+
+.active {
+    color: var(--white) !important;
 }

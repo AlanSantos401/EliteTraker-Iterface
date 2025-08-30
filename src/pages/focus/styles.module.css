@@ -1,0 +1,58 @@
+.container {
+    background-color: var(--dark-blue);
+    height: 100vh;
+    width: 100%;
+}
+
+.content {
+    width: 60%;
+    height: calc(100% - 40px);
+    padding: 20px;
+    border-right: 1px solid var(--light);
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    max-width: 480px;
+    width: 100%;
+    margin: 0 auto;
+    gap: 20px;
+}
+
+.input {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--white);
+    border-radius: 4px;
+    margin-top: 40px;
+    gap: 2px;
+    height: 36px;
+    padding: 0 10px;
+}
+
+.input input {
+    height: 36px;
+    width: 100%;
+    font-size: 16px;
+    background-color: transparent;
+    color: var(--white);
+}
+
+.input input::placeholder {
+    color: var(--light)
+}
+
+.input svg {
+    height: 24px;
+    width: 24px;
+    color: var(--white);
+    transform: rotate(45deg);
+    cursor: pointer;
+    transition: color 100ms;
+}
+
+.input svg:hover {
+    color: var(--info)
+}

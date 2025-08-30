@@ -4,9 +4,8 @@ import { Button } from "../../components/button";
 import { api } from "../../service/api";
 
 export function Login() {
-
 	async function handleAuth() {
-		const { data } = await api.get('/auth');
+		const { data } = await api.get("/auth");
 
 		window.location.href = data.redirectURL;
 	}
