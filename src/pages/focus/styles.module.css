@@ -5,6 +5,9 @@
 }
 
 .content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     width: 60%;
     height: calc(100% - 40px);
     padding: 20px;
@@ -55,4 +58,36 @@
 
 .input svg:hover {
     color: var(--info)
+}
+
+.timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 364px;
+    max-height: 364px;
+    height: 100%;
+    width: 100%;
+
+    border: 3px solid var(--white);
+    border-radius: 50%;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.timer span {
+     font-size: 40px;
+     font-weight: 600;
+     color: var(--white);
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    margin-top: 40px;
+    align-items: center;
+    width: 100%;
+    max-width: 180px;
+    gap: 20px;
 }
