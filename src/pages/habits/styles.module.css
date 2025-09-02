@@ -1,11 +1,12 @@
 .container {
+    display: grid;
+    grid-template-columns: 60% 1fr;
     background-color: var(--dark-blue);
     height: 100vh;
     width: 100%;
 }
 
 .content {
-    width: 60%;
     height: calc(100% - 40px);
     padding: 20px;
     border-right: 1px solid var(--light);
@@ -57,11 +58,26 @@
     justify-content: space-between;
     height: 46px;
     border-bottom: 1px solid var(--light);
+    transition: background-color 100ms;
+}
+
+.habit:hover {
+    background-color: var(--info-hover);
+}
+
+.habit-active {
+    background-color: var(--info-hover);
 }
 
 .habit p {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
     color: var(--white);
     font-size: 16px;
+
+    cursor: pointer;
 }
 
 .habit div {
@@ -115,4 +131,31 @@
 
 .habit div svg:hover {
     color: var(--error);
+}
+
+.metrics {
+    padding: 20px;
+}
+
+.metrics h2 {
+    font-size: 24px;
+    font-weight:600;
+    color: var(--white);
+    margin-top: px
+}
+
+.info-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+    gap: 80px;
+    border-bottom: 1px solid var(--light);
+}
+
+.calendar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
 }
