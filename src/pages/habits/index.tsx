@@ -1,11 +1,12 @@
 import { Send, Trash2 } from "lucide-react";
 import styles from "./styles.module.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { api } from "../../service/api";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { Header } from "../../components/header";
 import { Info } from "../../components/info";
-import { Calendar } from '@mantine/dates';
+import { Calendar } from "@mantine/dates";
+import { Indicator } from "@mantine/core";
 import clsx from "clsx";
 
 type Habit = {
@@ -21,18 +22,39 @@ type HabitMetrics = {
 	_id: string;
 	name: string;
 	completedDates: string[];
-}
+};
 
 export function Habits() {
 	const [habits, setHabits] = useState<Habit[]>([]);
-	const [metrics, setMetrics] = useState<HabitMetrics>({}as HabitMetrics);
-	const [selectedHabit, setSelectedhabit] = useState <Habit | null>(null);
+	const [metrics, setMetrics] = useState<HabitMetrics>({} as HabitMetrics);
+	const [selectedHabit, setSelectedHabit] = useState<Habit | null>(null);
 	const nameInput = useRef<HTMLInputElement>(null);
-	const today = dayjs().startOf("day").toISOString();
+	const today = dayjs().startOf("day");
+
+	const metricsInfo = useMemo(() => {
+		const numberOfMonthDays = today.endOf("month").get("date");
+		const numberOfDays = metrics?.completedDates ? metrics?.completedDates?.length : 0;
+
+		const completedDatesPerMonth = `${numberOfDays}/${numberOfMonthDays}`;
+
+		const completedMonthPercent = `${Math.round((numberOfDays / numberOfMonthDays) * 100)}%`;
+
+		return {
+			completedDatesPerMonth,
+			completedMonthPercent,
+		};
+	}, [metrics, today]);
 
 	async function handleSelectHabit(habit: Habit) {
-		setSelectedhabit(habit)
-		console.log(habit)
+		setSelectedHabit(habit);
+
+		const { data } = await api.get<HabitMetrics>(`/habits/${habit._id}/metrics`, {
+			params: {
+				date: today.toISOString(),
+			},
+		});
+
+		setMetrics(data);
 	}
 
 	async function handleSubmit() {
@@ -50,13 +72,19 @@ export function Habits() {
 			await loadHabits();
 		}
 	}
-	async function handleToglle(id: string) {
-		await api.patch(`/habits/${id}/toggle`);
+
+	async function handleToglle(habit: Habit) {
+		await api.patch(`/habits/${habit._id}/toggle`);
 
 		await loadHabits();
+		await handleSelectHabit(habit);
 	}
+
 	async function handleRemove(id: string) {
 		await api.delete(`/habits/${id}`);
+
+		setMetrics({} as HabitMetrics);
+		setSelectedHabit(null);
 
 		await loadHabits();
 	}
@@ -82,13 +110,19 @@ export function Habits() {
 
 				<div className={styles.habits}>
 					{habits.map((item) => (
-						<div key={item._id} className={clsx(styles.habit, item._id === selectedHabit?._id && styles['habit-active'])}>
+						<div
+							key={item._id}
+							className={clsx(
+								styles.habit,
+								item._id === selectedHabit?._id && styles["habit-active"],
+							)}
+						>
 							<p onClick={() => handleSelectHabit(item)}>{item.name}</p>
 							<div>
 								<input
 									type="checkbox"
-									checked={item.completedDates.some((item) => item === today)}
-									onChange={() => handleToglle(item._id)}
+									checked={item.completedDates.some((item) => item === today.toISOString())}
+									onChange={() => handleToglle(item)}
 								/>
 								<Trash2 onClick={() => handleRemove(item._id)} />
 							</div>
@@ -96,19 +130,32 @@ export function Habits() {
 					))}
 				</div>
 			</div>
-			<div className={styles.metrics}>
-              <h2>Estudar Espanhol</h2>
+			{selectedHabit && (
+				<div className={styles.metrics}>
+					<h2>{selectedHabit.name}</h2>
 
-			  <div className={styles['info-container']}>
-				<Info value="23/31" label="Dias concluidos"/>
-				<Info value="75%" label="Porcentagens"/>
-			  </div>
-			  <div className={styles['calendar-container']}>
-                <Calendar />
-			  </div>
-			  
-			  
-			</div>
+					<div className={styles["info-container"]}>
+						<Info value={metricsInfo.completedDatesPerMonth} label="Dias concluidos" />
+						<Info value={metricsInfo.completedMonthPercent} label="Porcentagens" />
+					</div>
+					<div className={styles["calendar-container"]}>
+						<Calendar
+							static
+							renderDay={(date) => {
+								const day = dayjs(date).date();
+								const isSameDate = metrics?.completedDates?.some((item) =>
+									dayjs(item).isSame(dayjs(date)),
+								);
+								return (
+									<Indicator size={8} color="var(--info)" offset={-2} disabled={!isSameDate}>
+										<div>{day}</div>
+									</Indicator>
+								);
+							}}
+						/>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }
