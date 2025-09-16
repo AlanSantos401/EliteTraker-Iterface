@@ -1,15 +1,32 @@
 import { X } from "lucide-react";
 import { Header } from "../../components/header";
 import styles from "./styles.module.css";
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "../../components/button";
 import { useTimer } from "react-timer-hook";
 import dayjs from "dayjs";
 import { api } from "../../service/api";
+import { Info } from "../../components/info";
+import { Calendar } from "@mantine/dates";
+import { Indicator } from "@mantine/core";
 
 type Timers = {
 	focus: number;
 	rest: number;
+};
+
+type FocusMetrics = {
+	_id: [number, number, number];
+	count: number;
+};
+
+type FocusTime = {
+	_id: string;
+	timeFrom: string;
+	timeTo: string;
+	userId: string;
+	createdAt: string;
+	updatedAt: string;
 };
 
 enum TimersState {
@@ -30,6 +47,10 @@ export function Focus() {
 	const [timers, setTimers] = useState<Timers>({ focus: 0, rest: 0 });
 	const [timerState, setTimerState] = useState<TimersState>(TimersState.PAUSED);
 	const [timeFrom, setTimeFrom] = useState<Date | null>(null);
+	const [focusMetrics, setFocusMetrics] = useState<FocusMetrics[]>([]);
+	const [focusTimes, setFocusTimes] = useState<FocusTime[]>([]);
+	const [currentDate, setCurrentDate] = useState<dayjs.Dayjs>(dayjs().startOf("day"));
+	const [currentMonth, setCurrentMonth] = useState<dayjs.Dayjs>(dayjs().startOf("month"));
 
 	function addSeconds(date: Date, seconds: number) {
 		const time = dayjs(date).add(seconds, "second");
@@ -138,11 +159,87 @@ export function Focus() {
 		setTimerState(TimersState.REST);
 	}
 
+	const metricsInfoByDay = useMemo(() => {
+		const timesMetrics = focusTimes.map((item) => ({
+			timeFrom: dayjs(item.timeFrom),
+			timeTo: dayjs(item.timeTo),
+		}));
+
+		let totalTimeInMinutes = 0;
+
+		if (timesMetrics.length) {
+			for (const { timeFrom, timeTo } of timesMetrics) {
+				const diff = timeTo.diff(timeFrom, "minutes");
+
+				totalTimeInMinutes += diff;
+			}
+		}
+
+		return {
+			timesMetrics,
+			totalTimeInMinutes,
+		};
+	}, [focusTimes]);
+
+	const metricsInfoByMonth = useMemo(() => {
+		const completedDates: String[] = [];
+		let couter: number = 0;
+
+		if (focusMetrics.length) {
+			focusMetrics.forEach((item) => {
+				const date = dayjs(`${item._id[0]}-${item._id[1]}-${item._id[2]}`)
+					.startOf("day")
+					.toISOString();
+
+				completedDates.push(date);
+				couter += item.count;
+			});
+		}
+
+		return { completedDates, couter };
+	}, [focusMetrics]);
+
 	function handleResume() {
 		handleStart();
 
 		setTimerState(TimersState.FOCUS);
 	}
+
+	async function loadFocusMetrics(currentMonth: string) {
+		const { data } = await api.get<FocusMetrics[]>("/focus-time/metrics", {
+			params: {
+				date: currentMonth,
+			},
+		});
+
+		setFocusMetrics(data);
+	}
+
+	async function loadFocusTimes(currentDate: string) {
+		const { data } = await api.get<FocusTime[]>("/focus-time", {
+			params: {
+				date: currentDate,
+			},
+		});
+
+		setFocusTimes(data);
+	}
+
+	async function handleSelectMonth(date: Date) {
+		setCurrentMonth(dayjs(date));
+	}
+
+	async function handleSelectDate(date: Date) {
+		setCurrentDate(dayjs(date));
+	}
+
+	useEffect(() => {
+		loadFocusMetrics(currentMonth.toISOString());
+	}, [currentMonth]);
+
+	useEffect(() => {
+		loadFocusTimes(currentDate.toISOString());
+	}, [currentDate]);
 
 	return (
 		<div className={styles.container}>
@@ -217,6 +314,41 @@ export function Focus() {
 					<Button onClick={handleCancel} variant="error">
 						Cancelar
 					</Button>
+				</div>
+			</div>
+			<div className={styles.metrics}>
+				<h2>Estatísticas</h2>
+
+				<div className={styles["info-container"]}>
+					<Info value={String(metricsInfoByMonth.couter)} label="Ciclos totais" />
+					<Info
+						value={`${metricsInfoByDay.totalTimeInMinutes} minutes`}
+						label="Tempo total de foco"
+					/>
+				</div>
+				<div className={styles["calendar-container"]}>
+					<Calendar
+						getDayProps={(date) => ({
+							selected: dayjs(date).isSame(currentDate),
+							onClick: async () => await handleSelectDate(new Date(date)),
+						})}
+						locale="pt-br"
+						style={{ fontSize: "20" }}
+						onMonthSelect={handleSelectMonth}
+						onNextMonth={handleSelectMonth}
+						onPreviousMonth={handleSelectMonth}
+						renderDay={(date) => {
+							const day = dayjs(date).date();
+							const isSameDate = metricsInfoByMonth.completedDates?.some((item) =>
+								dayjs(item.toString()).isSame(dayjs(date)),
+							);
+							return (
+								<Indicator size={8} color="var(--info)" offset={-2} disabled={!isSameDate}>
+									<div>{day}</div>
+								</Indicator>
+							);
+						}}
+					/>
 				</div>
 			</div>
 		</div>

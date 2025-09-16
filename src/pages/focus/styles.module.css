@@ -109,3 +109,31 @@
     max-width: 180px;
     gap: 20px;
 }
+
+.metrics {
+    padding: 20px;
+}
+
+.metrics h2 {
+    font-size: 24px;
+    font-weight:600;
+    color: var(--white);
+    margin-top: px
+}
+
+
+.info-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+    gap: 80px;
+    border-bottom: 1px solid var(--light);
+}
+
+.calendar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+}

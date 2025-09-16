@@ -45,12 +45,12 @@ export function Habits() {
 		};
 	}, [metrics, today]);
 
-	async function handleSelectHabit(habit: Habit) {
+	async function handleSelectHabit(habit: Habit, currentMonth?: Date) {
 		setSelectedHabit(habit);
 
 		const { data } = await api.get<HabitMetrics>(`/habits/${habit._id}/metrics`, {
 			params: {
-				date: today.toISOString(),
+				date: currentMonth ? currentMonth.toISOString() : today.startOf("month").toISOString(),
 			},
 		});
 
@@ -89,6 +89,10 @@ export function Habits() {
 		await loadHabits();
 	}
 
+	async function handleSelectMonth(date: Date) {
+		await handleSelectHabit(selectedHabit!, date);
+	}
+
 	async function loadHabits() {
 		const { data } = await api.get<Habit[]>("/habits");
 
@@ -117,7 +121,16 @@ export function Habits() {
 								item._id === selectedHabit?._id && styles["habit-active"],
 							)}
 						>
-							<p onClick={() => handleSelectHabit(item)}>{item.name}</p>
+							<p>
+								<button
+									type="button"
+									onClick={() => handleSelectHabit(item)}
+									className="habit-button"
+								>
+									{item.name}
+								</button>
+							</p>
+
 							<div>
 								<input
 									type="checkbox"
@@ -140,7 +153,12 @@ export function Habits() {
 					</div>
 					<div className={styles["calendar-container"]}>
 						<Calendar
+						    locale="pt-br"
+							style={{ fontSize: '20'}}
 							static
+							onMonthSelect={handleSelectMonth}
+							onNextMonth={handleSelectMonth}
+							onPreviousMonth={handleSelectMonth}
 							renderDay={(date) => {
 								const day = dayjs(date).date();
 								const isSameDate = metrics?.completedDates?.some((item) =>

@@ -59,6 +59,13 @@
     height: 46px;
     border-bottom: 1px solid var(--light);
     transition: background-color 100ms;
+
+    button {
+        background: none;
+        border: none;
+        width: 100%;
+        display: flex;
+    }
 }
 
 .habit:hover {
