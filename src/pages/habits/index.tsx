@@ -153,7 +153,6 @@ export function Habits() {
 					</div>
 					<div className={styles["calendar-container"]}>
 						<Calendar
-						    locale="pt-br"
 							static
 							onMonthSelect={handleSelectMonth}
 							onNextMonth={handleSelectMonth}
