@@ -352,7 +352,6 @@ export function Focus() {
 							selected: dayjs(date).isSame(currentDate),
 							onClick: async () => await handleSelectDate(new Date(date)),
 						})}
-						locale="pt-br"
 						onMonthSelect={handleSelectMonth}
 						onNextMonth={handleSelectMonth}
 						onPreviousMonth={handleSelectMonth}

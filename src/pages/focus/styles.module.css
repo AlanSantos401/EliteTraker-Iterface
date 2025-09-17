@@ -163,7 +163,10 @@
   margin-bottom: 1rem;
   padding: 0.5rem;
   border-radius: 8px;
-
+  
+ h3 {
+    margin-bottom: 10px;
+ }
   
 }
 
