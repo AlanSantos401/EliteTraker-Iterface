@@ -164,5 +164,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 40px;
+    margin-top: 20px;
+
+    tr {
+    display: flex;
+    gap: 15px;
+   }
+
+   th {
+    font-size: 30px;
+   }
+
+   button {
+    font-size: 25px;
+   }
+
+}
+
+.mantine-Calendar-calendarHeader {
+    gap: 10px
 }

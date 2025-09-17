@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { AlarmClock, X } from "lucide-react";
 import { Header } from "../../components/header";
 import styles from "./styles.module.css";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -327,13 +327,32 @@ export function Focus() {
 					/>
 				</div>
 				<div className={styles["calendar-container"]}>
+					{currentDate && (
+						<div className={styles['focus-info']}>
+							<h3>{dayjs(currentDate).format("D [de] MMMM")}</h3>
+							{focusTimes.slice(0, 3).map((item, idx) => {
+								const start = dayjs(item.timeFrom);
+								const end = dayjs(item.timeTo);
+								const duration = end.diff(start, "minutes");
+
+								return (
+									<div key={idx} className={styles['focus-item']}>
+										<span>
+											<AlarmClock />{start.format("HH:mm")} - {end.format("HH:mm")}
+										</span>
+										<span>{duration} minutos</span>
+									</div>
+								);
+							})}
+						</div>
+					)}
+
 					<Calendar
 						getDayProps={(date) => ({
 							selected: dayjs(date).isSame(currentDate),
 							onClick: async () => await handleSelectDate(new Date(date)),
 						})}
 						locale="pt-br"
-						style={{ fontSize: "20" }}
 						onMonthSelect={handleSelectMonth}
 						onNextMonth={handleSelectMonth}
 						onPreviousMonth={handleSelectMonth}

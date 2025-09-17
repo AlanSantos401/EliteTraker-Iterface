@@ -154,7 +154,6 @@ export function Habits() {
 					<div className={styles["calendar-container"]}>
 						<Calendar
 						    locale="pt-br"
-							style={{ fontSize: '20'}}
 							static
 							onMonthSelect={handleSelectMonth}
 							onNextMonth={handleSelectMonth}
